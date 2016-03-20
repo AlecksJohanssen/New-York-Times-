@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         SendNetWorkRequest();
         setupViews();
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
@@ -73,17 +74,25 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                onArticle();
+                onArticle(query);
+                InfinityAmmo(query);
                 searchView.clearFocus();
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+    public void InfinityAmmo(final String query) {
+        gvResults.setOnScrollListener(new InfiniteScroll(5) {
+            @Override
+            public void loadMore(int page, int totalItemsCount) {
+                onArticle(query);
+            }
+        });
     }
     public boolean isOnline(){
         Runtime runtime = Runtime.getRuntime();
@@ -135,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
     public void setupViews() {
 
         gvResults = (GridView) findViewById(R.id.gvResult);
+
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
@@ -146,13 +156,9 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("article", article);
                 startActivity(i);
             }
+
         });
-        gvResults.setOnScrollListener(new InfiniteScroll(5) {
-            @Override
-            public void loadMore(int page, int totalItemsCount) {
-                onArticle();
-            }
-        });
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -160,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             switch (item.getItemId()) {
@@ -174,9 +179,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public RequestParams getParams() {
+    public RequestParams getParams(String query) {
         RequestParams params = new RequestParams();
         params.put("api-key", "67446d0bde26aebfed2261c9c950bc08:11:74724105");
+        params.put("q",query);
         params.put("fq", type);
         params.put("page", 0);
         if (!TextUtils.isEmpty(type2)) {
@@ -185,10 +191,11 @@ public class MainActivity extends AppCompatActivity {
         return params;
     }
 
-    public void onArticle() {
+    public void onArticle(String query) {
+
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
-        client.get(url, getParams(), new JsonHttpResponseHandler() {
+        client.get(url, getParams(query), new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
