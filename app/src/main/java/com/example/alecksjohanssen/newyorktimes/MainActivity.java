@@ -7,11 +7,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -45,7 +48,6 @@ import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etQuery;
     GridView gvResults;
     Button btnsearch;
     ArrayList<Article> articles;
@@ -66,7 +68,27 @@ public class MainActivity extends AppCompatActivity {
         SendNetWorkRequest();
         setupViews();
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onArticle();
+                searchView.clearFocus();
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+
+    }
     public boolean isOnline(){
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -85,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -116,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupViews() {
-        etQuery = (EditText) findViewById(R.id.etQuery);
         gvResults = (GridView) findViewById(R.id.gvResult);
         btnsearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
@@ -132,15 +152,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -162,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private RequestParams getParams() {
-        String query = etQuery.getText().toString();
-
         RequestParams params = new RequestParams();
         params.put("api-key", "67446d0bde26aebfed2261c9c950bc08:11:74724105");
         params.put("fq", type);
@@ -174,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         return params;
     }
 
-    public void onArticle(View view) {
+    public void onArticle() {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
         client.get(url, getParams(), new JsonHttpResponseHandler() {
