@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alecksjohanssen.newyorktimes.Activities.ArticleActivity;
+import com.example.alecksjohanssen.newyorktimes.Activities.InfiniteScroll;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -49,15 +50,11 @@ import cz.msebera.android.httpclient.protocol.HTTP;
 public class MainActivity extends AppCompatActivity {
 
     GridView gvResults;
-    Button btnsearch;
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
-    TextView mEditText;
     String type;
     String type2;
-
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -71,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -87,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
-
     }
     public boolean isOnline(){
         Runtime runtime = Runtime.getRuntime();
@@ -137,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupViews() {
+
         gvResults = (GridView) findViewById(R.id.gvResult);
-        btnsearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
@@ -149,6 +145,12 @@ public class MainActivity extends AppCompatActivity {
                 Article article = articles.get(position);
                 i.putExtra("article", article);
                 startActivity(i);
+            }
+        });
+        gvResults.setOnScrollListener(new InfiniteScroll(5) {
+            @Override
+            public void loadMore(int page, int totalItemsCount) {
+                onArticle();
             }
         });
     }
@@ -172,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private RequestParams getParams() {
+    public RequestParams getParams() {
         RequestParams params = new RequestParams();
         params.put("api-key", "67446d0bde26aebfed2261c9c950bc08:11:74724105");
         params.put("fq", type);
@@ -187,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
         client.get(url, getParams(), new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
