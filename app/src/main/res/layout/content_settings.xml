@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Begin Date"
+            android:id="@+id/bgDate"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="130dp"
+            android:id="@+id/etDate"
+            android:layout_weight="2.38"
+            android:textAlignment="textEnd"
+            android:layout_marginRight="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select"
+            android:id="@+id/btnSelect" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvValue"
+            android:layout_marginLeft="10dp"
+            android:textAlignment="textEnd"
+            android:layout_marginRight="4dp" />
+    </LinearLayout>
+
+</LinearLayout>

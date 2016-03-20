@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/lbl_your_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Your name" />
+
+    <EditText
+        android:id="@+id/txt_your_name"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:hint="Type your name"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+
+</LinearLayout>
