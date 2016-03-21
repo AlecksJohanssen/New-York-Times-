@@ -52,7 +52,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 Well the main challenge is to pass the data from the Dialog Fragment to MainActivity.
-This app is still underconstruction, I'm only done with the functionality. I will update a new UI soon.
+This app is still underconstruction, I'm only quarter way done with the functionality. I will update a new UI and improve the Functionality soon..
 
 Describe any challenges encountered while building the app.
 
