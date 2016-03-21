@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     ArticleArrayAdapter adapter;
     String type;
     String type2;
+    String type3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(query != null)
-                {
+                if (query != null) {
                     adapter.clear();
                 }
                 onArticle(query);
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 searchView.clearFocus();
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 type = data.getStringExtra("selection");
                 type2 = data.getStringExtra("date");
+                type3= data.getStringExtra("sort");
                 Log.d("debug", type2);
             }
         }
@@ -148,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     public void setupViews() {
 
         gvResults = (GridView) findViewById(R.id.gvResult);
-
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
@@ -188,10 +189,15 @@ public class MainActivity extends AppCompatActivity {
         params.put("api-key", "67446d0bde26aebfed2261c9c950bc08:11:74724105");
         params.put("q",query);
         params.put("fq", type);
-        params.put("page", 0);
         if (!TextUtils.isEmpty(type2)) {
             params.put("begin_date", type2);
         }
+        else {
+            Toast.makeText(MainActivity.this,"Please input Date",Toast.LENGTH_SHORT).show();
+        }
+        params.put("sort", type3);
+
+        params.put("page", 0);
         return params;
     }
 

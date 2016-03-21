@@ -18,7 +18,7 @@ public class DialogSettings extends DialogFragment {
 
     String selection;
     Calendar myCalendar = Calendar.getInstance();
-    final String[] items = {"Arts", "Fashion & Style", "Sports"};
+    final String[] items = {"Arts", "Fashion & Style", "Sports","Politics"};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +36,6 @@ public class DialogSettings extends DialogFragment {
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 // Pass selection back to parent.
                 SettingsListener settingsActivity = (SettingsListener) getActivity();
                 settingsActivity.onSettingsSelected(selection);

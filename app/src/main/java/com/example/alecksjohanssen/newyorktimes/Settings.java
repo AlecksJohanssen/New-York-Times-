@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class Settings extends AppCompatActivity implements DialogSettings.SettingsListener {
-
+    EditText mEditText;
     EditText xEditText;
     Button button;
     TextView tvResult;
@@ -32,6 +32,7 @@ String day;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         xEditText = (EditText) findViewById(R.id.etDate);
+        mEditText = (EditText) findViewById(R.id.SortChoose);
         button = (Button) findViewById(R.id.btnSelect);
         tvResult = (TextView) findViewById(R.id.tvValue);
         onClickListener();
@@ -59,7 +60,6 @@ String day;
         });
     }
     private void datePicker() {
-
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd", Locale.US);
         final DatePickerDialog datePickerDialog = new DatePickerDialog(Settings.this, new DatePickerDialog.OnDateSetListener() {
@@ -88,6 +88,7 @@ String day;
         Intent resultIntent = new Intent();
         resultIntent.putExtra("selection", selection);
         resultIntent.putExtra("date", reportDate);
+        resultIntent.putExtra("sort",String.valueOf(mEditText.getText()));
         Log.d("dEbug",reportDate);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();

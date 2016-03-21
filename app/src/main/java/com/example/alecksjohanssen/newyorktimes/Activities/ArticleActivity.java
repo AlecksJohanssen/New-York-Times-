@@ -33,13 +33,13 @@ public class ArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         Article article = (Article) getIntent().getSerializableExtra("article");
         WebView webView = (WebView)(findViewById(R.id.wvArticle));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
+
                 return true;
             }
         });
@@ -54,11 +54,9 @@ public class ArticleActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.menu_item_share);
         ShareActionProvider miShare = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        // get reference to WebView
         WebView wvArticle = (WebView) findViewById(R.id.wvArticle);
-        setupFacebookShareIntent();
         shareIntent.putExtra(Intent.EXTRA_TEXT, wvArticle.getUrl());
+        setupFacebookShareIntent();
         miShare.setShareIntent(shareIntent);
         return super.onCreateOptionsMenu(menu);
 
@@ -73,7 +71,7 @@ public class ArticleActivity extends AppCompatActivity {
                 .setContentTitle("Title")
                 .setContentDescription(
                         "\"Body Of Test Post\"")
-                .setContentUrl(Uri.parse("https://www.facebook.com/PCGMikeOn"))
+                .setContentUrl(Uri.parse("https://www.facebook.com"))
                 .build();
 
         shareDialog.show(linkContent);
